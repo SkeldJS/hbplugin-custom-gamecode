@@ -1,4 +1,4 @@
-# hbplugin-custom-gamecode
+# hbplugin-customgamecode
 
 A plugin for [Hindenburg](https://github.com/skeldjs/Hindenburg) to allow players to enter in their own game codes for their rooms.
 
