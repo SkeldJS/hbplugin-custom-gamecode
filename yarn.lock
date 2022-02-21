@@ -5,9 +5,9 @@ __metadata:
   version: 5
   cacheKey: 8
 
-"@skeldjs/hindenburg@link:../..::locator=hbplugin-custom-gamecode%40workspace%3A.":
+"@skeldjs/hindenburg@link:../..::locator=hbplugin-customgamecode%40workspace%3A.":
   version: 0.0.0-use.local
-  resolution: "@skeldjs/hindenburg@link:../..::locator=hbplugin-custom-gamecode%40workspace%3A."
+  resolution: "@skeldjs/hindenburg@link:../..::locator=hbplugin-customgamecode%40workspace%3A."
   languageName: node
   linkType: soft
 
@@ -79,9 +79,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hbplugin-custom-gamecode@workspace:.":
+"hbplugin-customgamecode@workspace:.":
   version: 0.0.0-use.local
-  resolution: "hbplugin-custom-gamecode@workspace:."
+  resolution: "hbplugin-customgamecode@workspace:."
   dependencies:
     "@skeldjs/hindenburg": "link:../.."
     hbplugin-loadbalancer: ^1.0.0
