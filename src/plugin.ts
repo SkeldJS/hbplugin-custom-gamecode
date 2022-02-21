@@ -17,7 +17,7 @@ export interface CustomGameCodeCreation {
     expiryTimestamp: number;
 }
 
-@HindenburgPlugin("hbplugin-custom-gamecode", "1.0.0", "none")
+@HindenburgPlugin("hbplugin-custom-gamecode", "2.0.0", "none")
 export class CustomGamecodePlugin extends WorkerPlugin {
     protected customCreations: Map<string, CustomGameCodeCreation> = new Map;
     protected cleanUpInterval?: NodeJS.Timeout;
