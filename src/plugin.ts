@@ -43,7 +43,7 @@ export class CustomGamecodePlugin extends WorkerPlugin {
         return Date.now() >= creation.expiryTimestamp;
     }
 
-    getCustomCreation(client: Connection) {
+    getCustomCreationKey(client: Connection) {
         return client.remoteInfo.address + ":" +
             client.username + ":" +
             client.clientVersion.toString() + ":" +
@@ -52,8 +52,8 @@ export class CustomGamecodePlugin extends WorkerPlugin {
             [...client.mods].map(mod => ":" + mod[1].modId + ":" + mod[1].modVersion).join("");
     }
 
-    setCustomCreation(client: Connection) {
-        const key = this.getCustomCreation(client);
+    getCustomCreation(client: Connection) {
+        const key = this.getCustomCreationKey(client);
         const creation = this.customCreations.get(key);
 
         if (!creation)
@@ -67,22 +67,27 @@ export class CustomGamecodePlugin extends WorkerPlugin {
         return creation.gameSettings;
     }
 
-    setCustomGameCodeSettings(client: Connection, gameSettings: GameSettings) {
-        return this.customCreations.set(this.getCustomCreation(client), {
+    setCustomCreation(client: Connection, gameSettings: GameSettings) {
+        return this.customCreations.set(this.getCustomCreationKey(client), {
             gameSettings: gameSettings,
             client,
             expiryTimestamp: Date.now() + (60 * 1000)
         });
     }
 
+    deleteCustomCreation(client: Connection) {
+        this.customCreations.delete(this.getCustomCreationKey(client));
+    }
+
     @EventListener("worker.beforejoin")
     async onWorkerBeforeJoin(ev: WorkerBeforeJoinEvent) {
-        const customGameCode = this.setCustomCreation(ev.client);
+        const customGameCode = this.getCustomCreation(ev.client);
 
         if (customGameCode) {
             if (ev.gameCode === cancelCodeInt) {
                 ev.client.disconnect("Canceled game creation");
                 this.logger.info("%s canceled custom game code room creation.", ev.client);
+                this.deleteCustomCreation(ev.client);
                 ev.cancel();
                 return;
             }
@@ -98,12 +103,13 @@ export class CustomGamecodePlugin extends WorkerPlugin {
             const createdRoom = await this.worker.createRoom(ev.gameCode, customGameCode);
             this.logger.info("%s created room: ", createdRoom);
             ev.setRoom(createdRoom);
+            this.deleteCustomCreation(ev.client);
         }
     }
 
     @EventListener("room.beforecreate")
     async onWorkerBeforeCreate(ev: RoomBeforeCreateEvent) {
-        this.setCustomGameCodeSettings(ev.client, ev.gameOptions);
+        this.setCustomCreation(ev.client, ev.gameOptions);
         ev.cancel();
         ev.client.disconnect("Enter a custom game code in the join game section, or enter 'CANCEL' to stop.");
         this.logger.info("%s creating new room, waiting for game code", ev.client);
