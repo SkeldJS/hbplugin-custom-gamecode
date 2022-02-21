@@ -101,7 +101,7 @@ export class CustomGamecodePlugin extends WorkerPlugin {
             }
 
             const createdRoom = await this.worker.createRoom(ev.gameCode, customGameCode);
-            this.logger.info("%s created room: ", createdRoom);
+            this.logger.info("%s created room: %s", ev.client, createdRoom);
             ev.setRoom(createdRoom);
             this.deleteCustomCreation(ev.client);
         }
