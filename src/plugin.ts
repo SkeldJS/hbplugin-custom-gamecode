@@ -6,10 +6,10 @@ import {
     Connection,
     WorkerBeforeJoinEvent,
     RoomBeforeCreateEvent,
-    Code2Int
+    GameCode
 } from "@skeldjs/hindenburg";
 
-const cancelCodeInt = Code2Int("CANCEL");
+const cancelCodeInt = GameCode.convertStringToInt("CANCEL");
 
 export interface CustomGameCodeCreation {
     gameSettings: GameSettings;
